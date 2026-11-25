@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1795519566182,
+    "data": "2026-11-24T11:26:06.182Z",
+    "articoli": [
+      {
+        "id": 1,
+        "titolo": "Cappotto in Pura Lana Vergine",
+        "prezzo": 890,
+        "quantita": 1
+      }
+    ],
+    "totale": 890
+  },
+  {
+    "id": 1795520136259,
+    "data": "2026-11-24T11:35:36.259Z",
+    "metodoPagamento": "PayPal (Demo)",
+    "paypalOrderId": "PAYPAL-DEMO-1795520131371",
+    "paypalStato": "COMPLETED (SIMULATED)",
+    "articoli": [
+      {
+        "id": 2,
+        "titolo": "Giacca Doppiopetto Sartoriale",
+        "prezzo": 740,
+        "quantita": 1
+      }
+    ],
+    "totale": 740
+  },
+  {
+    "id": 1795520332859,
+    "data": "2026-11-24T11:38:52.859Z",
+    "metodoPagamento": "PayPal (Demo)",
+    "paypalOrderId": "PAYPAL-DEMO-1795520329538",
+    "paypalStato": "COMPLETED (SIMULATED)",
+    "articoli": [
+      {
+        "id": 2,
+        "titolo": "Giacca Doppiopetto Sartoriale",
+        "prezzo": 740,
+        "quantita": 1
+      }
+    ],
+    "totale": 740
+  },
+  {
+    "id": 1795520405667,
+    "data": "2026-11-24T11:40:05.667Z",
+    "metodoPagamento": "PayPal (Demo)",
+    "paypalOrderId": "PAYPAL-DEMO-1795520404307",
+    "paypalStato": "COMPLETED (SIMULATED)",
+    "articoli": [
+      {
+        "id": 2,
+        "titolo": "Giacca Doppiopetto Sartoriale",
+        "prezzo": 740,
+        "quantita": 1
+      }
+    ],
+    "totale": 740
+  }
+]
