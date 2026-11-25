@@ -13,6 +13,7 @@ const CATEGORIE = [
   'Regali',
 ];
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 const HERO_BG = '/hero.jpg';
 const LOGO_SRC = '/logo.png';
 
@@ -45,9 +46,9 @@ export default function App() {
       if (cat && cat !== 'Tutti') params.set('categoria', cat);
       if (query.trim()) params.set('q', query.trim());
 
-      const res = await fetch(`http://localhost:4000/api/prodotti?${params.toString()}`);
+      const res = await fetch(`${API_URL}/api/prodotti?${params.toString()}`);
       const data = await res.json();
-      setProdotti(data);
+      setProdotti(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Errore caricamento prodotti:', err);
     }
@@ -55,9 +56,9 @@ export default function App() {
 
   const caricaBorsa = async () => {
     try {
-      const res = await fetch('http://localhost:4000/api/borsa');
+      const res = await fetch(`${API_URL}/api/borsa`);
       const data = await res.json();
-      setBorsa(data);
+      setBorsa(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Errore caricamento borsa:', err);
     }
@@ -65,7 +66,7 @@ export default function App() {
 
   const caricaOrdini = async () => {
     try {
-      const res = await fetch('http://localhost:4000/api/ordini');
+      const res = await fetch(`${API_URL}/api/ordini`);
       const data = await res.json();
       setOrdini(Array.isArray(data) ? [...data].reverse() : []);
     } catch (err) {
@@ -75,7 +76,7 @@ export default function App() {
 
   const caricaConfigPayPal = async () => {
     try {
-      const res = await fetch('http://localhost:4000/api/paypal/config');
+      const res = await fetch(`${API_URL}/api/paypal/config`);
       if (!res.ok) return;
       const cfg = await res.json();
       setPaypalConfig({
@@ -139,13 +140,13 @@ export default function App() {
 
   const aggiungiAllaBorsa = async (prodottoId) => {
     try {
-      const res = await fetch('http://localhost:4000/api/borsa', {
+      const res = await fetch(`${API_URL}/api/borsa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prodottoId }),
       });
       const aggiornata = await res.json();
-      setBorsa(aggiornata);
+      setBorsa(Array.isArray(aggiornata) ? aggiornata : []);
       setOrdineInviato(false);
       setBorsaAperta(true);
     } catch (err) {
@@ -155,13 +156,13 @@ export default function App() {
 
   const aggiornaQuantita = async (id, delta) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/borsa/${id}`, {
+      const res = await fetch(`${API_URL}/api/borsa/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ delta }),
       });
       const aggiornata = await res.json();
-      setBorsa(aggiornata);
+      setBorsa(Array.isArray(aggiornata) ? aggiornata : []);
     } catch (err) {
       console.error('Errore aggiornamento quantità:', err);
     }
@@ -169,18 +170,18 @@ export default function App() {
 
   const rimuoviDallaBorsa = async (id) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/borsa/${id}`, {
+      const res = await fetch(`${API_URL}/api/borsa/${id}`, {
         method: 'DELETE',
       });
       const aggiornata = await res.json();
-      setBorsa(aggiornata);
+      setBorsa(Array.isArray(aggiornata) ? aggiornata : []);
     } catch (err) {
       console.error('Errore rimozione borsa:', err);
     }
   };
 
   const catturaOrdineSulBackend = async (orderID, simulated = false) => {
-    const res = await fetch('http://localhost:4000/api/paypal/capture-order', {
+    const res = await fetch(`${API_URL}/api/paypal/capture-order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -209,7 +210,7 @@ export default function App() {
     setPaypalAperta(true);
 
     try {
-      const res = await fetch('http://localhost:4000/api/paypal/create-order', {
+      const res = await fetch(`${API_URL}/api/paypal/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ articoli: borsa }),
@@ -262,7 +263,7 @@ export default function App() {
       .Buttons({
         createOrder: async () => {
           setPaypalErrore('');
-          const res = await fetch('http://localhost:4000/api/paypal/create-order', {
+          const res = await fetch(`${API_URL}/api/paypal/create-order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ articoli: borsaRef.current }),
@@ -404,7 +405,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Menu Mobile / Tablet (aperto dalle tre linee in alto a destra) */}
+      {/* Menu Mobile / Tablet */}
       {menuMobileAperto && (
         <div
           onClick={() => setMenuMobileAperto(false)}
@@ -552,7 +553,7 @@ export default function App() {
                   </p>
                   <div className="mt-auto pt-3 sm:pt-4 flex flex-wrap items-center justify-between gap-2.5">
                     <strong className="text-sm sm:text-base font-normal whitespace-nowrap">
-                      € {item.prezzo.toLocaleString('it-IT')}
+                      € {Number(item.prezzo).toLocaleString('it-IT')}
                     </strong>
                     <button
                       type="button"
@@ -663,7 +664,7 @@ export default function App() {
 
               <div className="pt-3 sm:pt-4 border-t border-[#232f33] flex flex-wrap items-center justify-between gap-3">
                 <strong className="text-base sm:text-lg font-normal whitespace-nowrap">
-                  € {prodottoSelezionato.prezzo.toLocaleString('it-IT')}
+                  € {Number(prodottoSelezionato.prezzo).toLocaleString('it-IT')}
                 </strong>
                 <button
                   type="button"
@@ -716,7 +717,7 @@ export default function App() {
                         {item.titolo}
                       </strong>
                       <span className="text-[11px] sm:text-xs text-[#a4b5ba]">
-                        {item.quantita} × € {item.prezzo.toLocaleString('it-IT')}
+                        {item.quantita} × € {Number(item.prezzo).toLocaleString('it-IT')}
                       </span>
                     </div>
                     <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
